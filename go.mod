@@ -1,4 +1,4 @@
-module github.com/hashicorp/vault-plugin-secrets-gcp
+module github.com/accessium-io/vault-plugin-secrets-gcp
 
 go 1.20
 
