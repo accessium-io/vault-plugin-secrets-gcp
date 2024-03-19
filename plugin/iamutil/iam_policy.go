@@ -66,11 +66,12 @@ func (p *Policy) ChangeBindings(toAdd *PolicyDelta, toRemove *PolicyDelta) (chan
 	//Loop through the existing policyBindings
 	for _, bind := range p.Bindings {
 		//for each binding, set of existing members
-		memberSet := util.ToSet(bind.Members)
+		memberSet := util.StringSet{}
 		//If adding
 		if toAdd != nil {
 			//If the binding role is in the list of roles and they have the same condition.
 			if toAdd.Roles.Includes(bind.Role) && toAdd.Condition == bind.Condition {
+				memberSet = util.ToSet(bind.Members)
 				changed = true
 				// Add the binding to the set of alreadyAdded bindings
 				alreadyAdded = append(alreadyAdded, bind)
@@ -83,6 +84,7 @@ func (p *Policy) ChangeBindings(toAdd *PolicyDelta, toRemove *PolicyDelta) (chan
 			// If the list of roles includes one of the roles to remove, and they have the same condition
 			// TODO:: Do we want to remove users regardless of the condition?
 			if toRemove.Roles.Includes(bind.Role) && toAdd.Condition == bind.Condition {
+				memberSet = util.ToSet(bind.Members)
 				if memberSet.Includes(toRemoveMem) {
 					changed = true
 					//remove the member form the memberSet
